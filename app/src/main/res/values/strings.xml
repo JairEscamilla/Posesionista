@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Posesionista</string>
+    <string name="label_nombre">Nombre</string>
+    <string name="label_precio">Precio</string>
+    <string name="label_serie">Serie</string>
+    <string name="nombre">Nombre Cosa</string>
+    <string name="precio">Precio cosa</string>
+    <string name="serie">Número de serie</string>
+    <string name="fecha">Fecha</string>
+</resources>
