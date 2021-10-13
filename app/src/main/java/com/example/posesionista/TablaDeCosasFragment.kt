@@ -68,12 +68,14 @@ class TablaDeCosasFragment: Fragment() {
     private inner class cosaHolder(vista: View): RecyclerView.ViewHolder(vista), View.OnClickListener {
         private val nombreTextView: TextView = itemView.findViewById(R.id.label_nombre)
         private val precioTextView: TextView = itemView.findViewById(R.id.label_precio)
+        private val serieTextView: TextView = itemView.findViewById(R.id.label_serie)
         private lateinit var cosa: Cosa
 
         fun binding(cosa: Cosa) {
             this.cosa = cosa
             nombreTextView.text = cosa.nombreDeCosa
             precioTextView.text = "$" + cosa.valorEnPesos.toString()
+            serieTextView.text = cosa.numeroDeSerie
         }
 
         init {
