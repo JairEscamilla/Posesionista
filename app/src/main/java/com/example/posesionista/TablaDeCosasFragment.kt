@@ -95,6 +95,7 @@ class TablaDeCosasFragment: Fragment() {
                 in 700..800 -> priceColor = Color.RED
                 in 800..900 -> priceColor = Color.rgb(152, 202, 63)
                 in 900..1000 -> priceColor = Color.rgb(32, 41, 66)
+                else -> priceColor = Color.rgb(54, 179, 126)
             }
 
             return  priceColor

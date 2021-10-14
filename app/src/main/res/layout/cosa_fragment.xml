@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:importantForAutofill="no"
-        android:inputType="textPersonName"
+        android:inputType="number"
         android:minHeight="48dp"
         android:text="@string/precio"
         app:layout_constraintBottom_toBottomOf="@+id/labelPrecio"
