@@ -3,6 +3,7 @@ package com.example.posesionista
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -37,9 +39,18 @@ class TablaDeCosasFragment: Fragment() {
         callbackInterfaz = null
     }
 
-    private fun actualizaUi() {
+    private fun actualizaUi(context: Context) {
         val inventario = tablaDeCosasViewModel.inventario
         adaptador = CosaAdapter(inventario)
+        val swipegestures = object : SwipeGestures(context) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                if(direction == ItemTouchHelper.LEFT) {
+                    adaptador?.deleteItem(viewHolder.absoluteAdapterPosition)
+                }
+            }
+        }
+        val touchHelper = ItemTouchHelper(swipegestures)
+        touchHelper.attachToRecyclerView(cosaRecyclerView)
         cosaRecyclerView.adapter = adaptador
     }
 
@@ -57,7 +68,7 @@ class TablaDeCosasFragment: Fragment() {
         val vista = inflater.inflate(R.layout.lista_cosas_fragment, container, false)
         cosaRecyclerView = vista.findViewById(R.id.cosa_recycler_view) as RecyclerView
         cosaRecyclerView.layoutManager = LinearLayoutManager(context)
-        actualizaUi()
+        actualizaUi(context!!)
         return vista
     }
 
@@ -83,7 +94,7 @@ class TablaDeCosasFragment: Fragment() {
         }
 
         fun getPriceColor(price: Int): Int {
-            var priceColor = 0
+            var priceColor: Int
             when(price) {
                 in 0..100 -> priceColor = Color.BLACK
                 in 100..200 -> priceColor = Color.BLUE
@@ -111,7 +122,7 @@ class TablaDeCosasFragment: Fragment() {
         }
     }
 
-    private inner class CosaAdapter(var inventario: List<Cosa>): RecyclerView.Adapter<cosaHolder>() {
+    private inner class CosaAdapter(var inventario: ArrayList<Cosa>): RecyclerView.Adapter<cosaHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): cosaHolder {
             val holder = layoutInflater.inflate(R.layout.cosa_layout, parent, false)
             return cosaHolder(holder)
@@ -128,6 +139,11 @@ class TablaDeCosasFragment: Fragment() {
                 precioTextView.text = "$${cosa.valorEnPesos}"
             }*/
             holder.binding(cosa)
+        }
+
+        fun deleteItem(position: Int) {
+            inventario.removeAt(position)
+            notifyDataSetChanged()
         }
     }
 }

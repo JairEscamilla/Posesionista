@@ -2,12 +2,13 @@ package com.example.posesionista
 
 import androidx.lifecycle.ViewModel
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class TablaDeCosasViewModel: ViewModel() {
-    val inventario = mutableListOf<Cosa>()
-    val nombres = arrayOf("Telefono", "Pan", "Playera")
-    var adjetivos = arrayOf("Gris", "Suave", "Comoda")
+    val inventario = ArrayList<Cosa>()
+    private val nombres = arrayOf("Telefono", "Pan", "Playera")
+    private var adjetivos = arrayOf("Gris", "Suave", "Comoda")
 
     init {
         for(i in 0 until 100){

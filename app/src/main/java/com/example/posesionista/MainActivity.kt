@@ -10,7 +10,6 @@ class MainActivity : AppCompatActivity(), TablaDeCosasFragment.InterfazTablaDeCo
         val fragmentoActual = supportFragmentManager.findFragmentById(R.id.fragment_container)
         if(fragmentoActual == null){
             val fragmento = TablaDeCosasFragment()
-            //val fragmento = CosaFragment() val
             supportFragmentManager.beginTransaction().add(R.id.fragment_container,fragmento).commit()
         }
     }
