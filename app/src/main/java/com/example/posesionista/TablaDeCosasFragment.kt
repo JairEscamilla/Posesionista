@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.util.*
+import kotlin.collections.ArrayList
 
 private const val TAG = "TablaDeCosasFragment"
 class TablaDeCosasFragment: Fragment() {
@@ -47,6 +49,20 @@ class TablaDeCosasFragment: Fragment() {
                 if(direction == ItemTouchHelper.LEFT) {
                     adaptador?.deleteItem(viewHolder.absoluteAdapterPosition)
                 }
+            }
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                val from_pos = viewHolder.absoluteAdapterPosition
+                val to_pos = target.absoluteAdapterPosition
+
+                Collections.swap(inventario, from_pos, to_pos)
+                adaptador?.notifyItemMoved(from_pos, to_pos)
+
+                return false
             }
         }
         val touchHelper = ItemTouchHelper(swipegestures)
