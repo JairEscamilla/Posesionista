@@ -1,6 +1,8 @@
 package com.example.posesionista
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -158,8 +161,22 @@ class TablaDeCosasFragment: Fragment() {
         }
 
         fun deleteItem(position: Int) {
-            inventario.removeAt(position)
-            notifyDataSetChanged()
+            var builder = AlertDialog.Builder(activity)
+            builder.setTitle(R.string.dialog_title)
+            builder.setMessage(R.string.dialog_delete_item)
+            builder.setPositiveButton(R.string.si, {dialog, _ ->
+                inventario.removeAt(position)
+                notifyDataSetChanged()
+                dialog.cancel()
+            })
+
+            builder.setNegativeButton(R.string.cancel, {dialog, _ ->
+                notifyDataSetChanged()
+                dialog.cancel()
+            })
+
+            var alert: AlertDialog = builder.create()
+            alert.show()
         }
     }
 }

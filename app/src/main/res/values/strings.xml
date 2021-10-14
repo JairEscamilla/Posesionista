@@ -7,4 +7,9 @@
     <string name="precio">Precio cosa</string>
     <string name="serie">Número de serie</string>
     <string name="fecha">Fecha</string>
+    <string name="dialog_delete_item">¿Estás seguro de que deseas elimiar este elemento?</string>
+    <string name="si">Sí</string>
+    <string name="Si">Sí</string>
+    <string name="cancel">Cancelar</string>
+    <string name="dialog_title">Confirmación</string>
 </resources>
