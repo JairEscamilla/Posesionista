@@ -1,6 +1,7 @@
 package com.example.posesionista
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,9 @@ class TablaDeCosasFragment: Fragment() {
     private lateinit var cosaRecyclerView: RecyclerView
     private var adaptador: CosaAdapter? = null
     private var callbackInterfaz: InterfazTablaDeCosas? = null
+    private val tablaDeCosasViewModel: TablaDeCosasViewModel by lazy {
+        ViewModelProvider(this).get(TablaDeCosasViewModel::class.java)
+    }
 
     interface InterfazTablaDeCosas {
         fun onCosasSeleccionada(unaCosa: Cosa)
@@ -39,9 +43,7 @@ class TablaDeCosasFragment: Fragment() {
         cosaRecyclerView.adapter = adaptador
     }
 
-    private val tablaDeCosasViewModel: TablaDeCosasViewModel by lazy {
-        ViewModelProvider(this).get(TablaDeCosasViewModel::class.java)
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,9 +75,29 @@ class TablaDeCosasFragment: Fragment() {
 
         fun binding(cosa: Cosa) {
             this.cosa = cosa
+            val priceColor = getPriceColor(cosa.valorEnPesos)
             nombreTextView.text = cosa.nombreDeCosa
             precioTextView.text = "$" + cosa.valorEnPesos.toString()
             serieTextView.text = cosa.numeroDeSerie
+            precioTextView.setTextColor(priceColor)
+        }
+
+        fun getPriceColor(price: Int): Int {
+            var priceColor = 0
+            when(price) {
+                in 0..100 -> priceColor = Color.BLACK
+                in 100..200 -> priceColor = Color.BLUE
+                in 200..300 -> priceColor = Color.CYAN
+                in 300..400 -> priceColor = Color.DKGRAY
+                in 400..500 -> priceColor = Color.GRAY
+                in 500..600 -> priceColor = Color.rgb(153, 206, 244)
+                in 600..700 -> priceColor = Color.MAGENTA
+                in 700..800 -> priceColor = Color.RED
+                in 800..900 -> priceColor = Color.rgb(152, 202, 63)
+                in 900..1000 -> priceColor = Color.rgb(32, 41, 66)
+            }
+
+            return  priceColor
         }
 
         init {

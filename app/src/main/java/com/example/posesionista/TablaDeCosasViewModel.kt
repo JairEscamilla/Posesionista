@@ -14,7 +14,7 @@ class TablaDeCosasViewModel: ViewModel() {
             val cosa = Cosa()
             val nombreAzar = nombres.random()
             val adjetivoAzar = adjetivos.random()
-            val precioAzar = Random().nextInt(100)
+            val precioAzar = Random().nextInt(1001)
             cosa.nombreDeCosa = "$nombreAzar $adjetivoAzar"
             cosa.valorEnPesos = precioAzar
             inventario += cosa
