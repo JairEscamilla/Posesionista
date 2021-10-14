@@ -8,8 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import java.util.*
+
 
 class CosaFragment: Fragment() {
     private lateinit var cosa: Cosa
@@ -34,7 +35,12 @@ class CosaFragment: Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if(s.hashCode() == campoNombre.text.hashCode()){
-                    cosa.nombreDeCosa = s.toString()
+                    if (s.toString().isEmpty()){
+                        Toast.makeText(activity, "El campo nombre no puede estar vacio", Toast.LENGTH_SHORT).show()
+                    }else{
+                        cosa.nombreDeCosa = s.toString()
+                    }
+
                 }
                 if(s.hashCode() == campoPrecio.text.hashCode()){
                     if(s!= null){
@@ -72,7 +78,7 @@ class CosaFragment: Fragment() {
         campoFecha = vista.findViewById(R.id.labelFecha) as TextView
         campoNombre.setText(cosa.nombreDeCosa)
         campoPrecio.setText(cosa.valorEnPesos.toString())
-        campoSerie.setText(cosa.numeroDeSerie.toString())
+        campoSerie.setText(cosa.numeroDeSerie)
         campoFecha.text = cosa.fechaDeCreacion.toString()
         return vista
     }
