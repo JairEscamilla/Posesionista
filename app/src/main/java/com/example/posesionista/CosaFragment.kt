@@ -99,6 +99,7 @@ class CosaFragment: Fragment() {
                         }, year, month, day)
                     }
 
+            dpd?.datePicker?.maxDate = c.timeInMillis
             dpd?.show()
         }
         return vista
