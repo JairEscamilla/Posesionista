@@ -7,7 +7,9 @@ class MainActivity : AppCompatActivity(), TablaDeCosasFragment.InterfazTablaDeCo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        // Se obtiene el fragmento actual
         val fragmentoActual = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        // Si no existe, seteamos el fragmento de la Tabla de Cosas
         if(fragmentoActual == null){
             val fragmento = TablaDeCosasFragment()
             supportFragmentManager.beginTransaction().add(R.id.fragment_container,fragmento).commit()
@@ -15,7 +17,7 @@ class MainActivity : AppCompatActivity(), TablaDeCosasFragment.InterfazTablaDeCo
     }
 
     override fun onCosasSeleccionada(unaCosa: Cosa) {
-        //val fragmento = CosaFragment()
+        // Obtenemos y seteamos una nueva instancia del fragment
         val fragmento = CosaFragment.nuevaInstancia(unaCosa)
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragmento).addToBackStack(null).commit()
     }

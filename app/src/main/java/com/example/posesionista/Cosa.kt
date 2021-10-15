@@ -5,8 +5,9 @@ import android.os.Parcelable
 import java.text.SimpleDateFormat
 import java.util.*
 
+// Declaracion de la clase Cosa
 class Cosa(): Parcelable{
-    private val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+    private val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()) // Formateador para la fecha
     var nombreDeCosa: String = ""
     var valorEnPesos: Int = 0
     var numeroDeSerie: String = UUID.randomUUID().toString().substring(0, 6)
@@ -21,10 +22,12 @@ class Cosa(): Parcelable{
         fechaDeCreacion = parcel.readString().toString()
     }
 
+    // Funcion para definir la clase abstracta
     override fun describeContents(): Int {
         return 0
     }
 
+    // Funcion que se usa para escribir datos a parcel
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeString(nombreDeCosa)
         dest.writeInt(valorEnPesos)
@@ -32,6 +35,7 @@ class Cosa(): Parcelable{
         dest.writeString(fechaDeCreacion)
     }
 
+    // Companion object para crear el Parcelable de los datos que se quieren comunicar
     companion object CREATOR : Parcelable.Creator<Cosa> {
         override fun createFromParcel(source: Parcel): Cosa {
             return Cosa(source)

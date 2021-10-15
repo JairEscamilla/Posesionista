@@ -11,12 +11,13 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 
 
-
+// Creo una clase abstracta que ayudara a detectar los swipes del usuario en pantalla
 abstract class SwipeGestures(context : Context) : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
     ItemTouchHelper.LEFT) {
-    private val deleteColor = ContextCompat.getColor(context, R.color.deletecolor)
-    private val deleteIcon = R.drawable.ic_menu_delete
+    private val deleteColor = ContextCompat.getColor(context, R.color.deletecolor) // SETEO EL COLOR DE FONDO AL ELIMINAR
+    private val deleteIcon = R.drawable.ic_menu_delete // SETEO EL ICONO A USAR AL ELIMINAR uUNA COSA
 
+    // Sobreescribo el metodo de onChildDraw
     override fun onChildDraw(
         c: Canvas,
         recyclerView: RecyclerView,
@@ -26,6 +27,7 @@ abstract class SwipeGestures(context : Context) : ItemTouchHelper.SimpleCallback
         actionState: Int,
         isCurrentlyActive: Boolean
     ) {
+        // Hago uso de la libreria instalada para setear los efectos al hacer swipe
         RecyclerViewSwipeDecorator.Builder(
             c,
             recyclerView,

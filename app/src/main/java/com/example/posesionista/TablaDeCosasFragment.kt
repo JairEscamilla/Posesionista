@@ -22,14 +22,16 @@ import kotlin.collections.ArrayList
 
 private const val TAG = "TablaDeCosasFragment"
 class TablaDeCosasFragment: Fragment() {
-
+    // Variables iniciales necesarias para manejar la tabla de cosas
     private lateinit var cosaRecyclerView: RecyclerView
     private var adaptador: CosaAdapter? = null
     private var callbackInterfaz: InterfazTablaDeCosas? = null
+    // Cargamos el view model
     private val tablaDeCosasViewModel: TablaDeCosasViewModel by lazy {
         ViewModelProvider(this).get(TablaDeCosasViewModel::class.java)
     }
 
+    // Generamos una interface para manejar las cosas seleccionadas
     interface InterfazTablaDeCosas {
         fun onCosasSeleccionada(unaCosa: Cosa)
     }
@@ -37,20 +39,23 @@ class TablaDeCosasFragment: Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callbackInterfaz = context as InterfazTablaDeCosas?
+        // seteamos el contexto al callback de la interfaz
     }
 
     override fun onDetach() {
         super.onDetach()
         callbackInterfaz = null
+        // Se hace null el callback para evitar fugas en memoria
     }
 
+    // Funcion que actualiza la UI y recibe el contexto de la aplicacion
     private fun actualizaUi(context: Context) {
-        val inventario = tablaDeCosasViewModel.inventario
-        adaptador = CosaAdapter(inventario)
-        val swipegestures = object : SwipeGestures(context) {
+        val inventario = tablaDeCosasViewModel.inventario // Obtengo el inventario
+        adaptador = CosaAdapter(inventario) // Obtengo el adaptador del recycler view
+        val swipegestures = object : SwipeGestures(context) { //  Genero los listeners para cuando se detecte el swipe del usuario
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 if(direction == ItemTouchHelper.LEFT) {
-                    adaptador?.deleteItem(viewHolder.absoluteAdapterPosition)
+                    adaptador?.deleteItem(viewHolder.absoluteAdapterPosition) // Si se hace swipe hacia la izquierda, entonces elimino el item
                 }
             }
 
@@ -59,6 +64,7 @@ class TablaDeCosasFragment: Fragment() {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
+                // Al moverse verticalmente, se mueve la posicion del item seleccionado
                 val from_pos = viewHolder.absoluteAdapterPosition
                 val to_pos = target.absoluteAdapterPosition
 
@@ -84,6 +90,7 @@ class TablaDeCosasFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Generamos el Recycler view y después actualizamos el UI
         val vista = inflater.inflate(R.layout.lista_cosas_fragment, container, false)
         cosaRecyclerView = vista.findViewById(R.id.cosa_recycler_view) as RecyclerView
         cosaRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -104,6 +111,7 @@ class TablaDeCosasFragment: Fragment() {
         private lateinit var cosa: Cosa
 
         fun binding(cosa: Cosa) {
+            // Seteamos a la vista los valos de la cosa
             this.cosa = cosa
             val priceColor = getPriceColor(cosa.valorEnPesos)
             nombreTextView.text = cosa.nombreDeCosa
@@ -112,6 +120,7 @@ class TablaDeCosasFragment: Fragment() {
             precioTextView.setTextColor(priceColor)
         }
 
+        // Funcion para obtener el color de fondo de los precios de acuerdo al rango en el cual se encuentran
         fun getPriceColor(price: Int): Int {
             var priceColor: Int
             when(price) {
@@ -132,51 +141,47 @@ class TablaDeCosasFragment: Fragment() {
         }
 
         init {
-            itemView.setOnClickListener(this)
+            itemView.setOnClickListener(this) // Seteamos el clicklistener al item
         }
 
         override fun onClick(v: View?) {
-            // Toast.makeText(context, "${nombreTextView.text} fue seleccionada", Toast.LENGTH_SHORT).show()
-            callbackInterfaz?.onCosasSeleccionada(cosa)
+            callbackInterfaz?.onCosasSeleccionada(cosa) // Ejecutamos la funcion de oncosa seleccionada que viene de la interfaz
         }
     }
 
+    // Creamos el adapter
     private inner class CosaAdapter(var inventario: ArrayList<Cosa>): RecyclerView.Adapter<cosaHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): cosaHolder {
-            val holder = layoutInflater.inflate(R.layout.cosa_layout, parent, false)
-            return cosaHolder(holder)
+            val holder = layoutInflater.inflate(R.layout.cosa_layout, parent, false) // Inflamos el layout
+            return cosaHolder(holder) // Regresamos el holder
         }
 
-        override fun getItemCount(): Int {
+        override fun getItemCount(): Int {  // Regresamos el Item count como el tamaño del inventario
             return inventario.size
         }
 
-        override fun onBindViewHolder(holder: cosaHolder, position: Int) {
+        override fun onBindViewHolder(holder: cosaHolder, position: Int) { // Obtenemos la la cosa actual y se la bindeamos al holder
             val cosa = inventario[position]
-           /* holder.apply {
-                nombreTextView.text = cosa.nombreDeCosa
-                precioTextView.text = "$${cosa.valorEnPesos}"
-            }*/
             holder.binding(cosa)
         }
 
-        fun deleteItem(position: Int) {
-            var builder = AlertDialog.Builder(activity)
+        fun deleteItem(position: Int) { // Funcion para eliminar un item
+            var builder = AlertDialog.Builder(activity) // Genero al alert para confirmar que se quiere eliminar el item
             builder.setTitle(R.string.dialog_title)
             builder.setMessage(R.string.dialog_delete_item)
-            builder.setPositiveButton(R.string.si, {dialog, _ ->
+            builder.setPositiveButton(R.string.si, {dialog, _ -> // En caso de que la respuesta sea positiva, eliminamos el item
                 inventario.removeAt(position)
                 notifyDataSetChanged()
                 dialog.cancel()
             })
 
-            builder.setNegativeButton(R.string.cancel, {dialog, _ ->
+            builder.setNegativeButton(R.string.cancel, {dialog, _ -> // En caso negativo, se cierra el dialogo
                 notifyDataSetChanged()
                 dialog.cancel()
             })
 
             var alert: AlertDialog = builder.create()
-            alert.show()
+            alert.show() // Muestro el alert
         }
     }
 }
