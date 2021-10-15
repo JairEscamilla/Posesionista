@@ -1,15 +1,15 @@
 package com.example.posesionista
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
+import java.util.*
 
 
 class CosaFragment: Fragment() {
@@ -23,8 +23,9 @@ class CosaFragment: Fragment() {
         super.onCreate(savedInstanceState)
         cosa = Cosa()
         cosa = arguments?.getParcelable("COSA_RECIBIDA")!!
-
     }
+
+
 
     override fun onStart() {
         super.onStart()
@@ -72,6 +73,7 @@ class CosaFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val vista = inflater.inflate(R.layout.cosa_fragment, container, false)
+        val button = vista.findViewById<Button>(R.id.pickDateBtn)
         campoNombre = vista.findViewById(R.id.nombre_cosa) as EditText
         campoPrecio = vista.findViewById(R.id.precio_cosa) as EditText
         campoSerie = vista.findViewById(R.id.serie_cosa) as EditText
@@ -79,7 +81,26 @@ class CosaFragment: Fragment() {
         campoNombre.setText(cosa.nombreDeCosa)
         campoPrecio.setText(cosa.valorEnPesos.toString())
         campoSerie.setText(cosa.numeroDeSerie)
-        campoFecha.text = cosa.fechaDeCreacion.toString()
+        campoFecha.text = cosa.fechaDeCreacion
+        button.setOnClickListener {
+            val c = Calendar.getInstance()
+            val year = c.get(Calendar.YEAR)
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+
+
+                val dpd =
+                    activity?.let { it1 ->
+                        DatePickerDialog(it1, { _, yearN, monthOfYear, dayOfMonth ->
+                            val newDate = "${dayOfMonth}-${monthOfYear}-${yearN}"
+                            campoFecha.text = newDate
+                            cosa.fechaDeCreacion = newDate
+
+                        }, year, month, day)
+                    }
+
+            dpd?.show()
+        }
         return vista
     }
     companion object {
