@@ -179,7 +179,9 @@ class TablaDeCosasFragment: Fragment() {
                 notifyDataSetChanged()
                 dialog.cancel()
             })
-
+            builder.setOnDismissListener {
+                notifyDataSetChanged()
+            }
             var alert: AlertDialog = builder.create()
             alert.show() // Muestro el alert
         }
