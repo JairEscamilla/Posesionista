@@ -12,6 +12,7 @@ class Cosa(): Parcelable{
     var valorEnPesos: Int = 0
     var numeroDeSerie = ""
     var fechaDeCreacion: String = simpleDateFormat.format(Date())
+    var idCosa = UUID.randomUUID().toString().substring(0, 6)
 
 
 
@@ -20,6 +21,7 @@ class Cosa(): Parcelable{
         valorEnPesos = parcel.readInt()
         numeroDeSerie = parcel.readString().toString()
         fechaDeCreacion = parcel.readString().toString()
+        idCosa = parcel.readString().toString()
     }
 
     // Funcion para definir la clase abstracta
@@ -33,6 +35,7 @@ class Cosa(): Parcelable{
         dest.writeInt(valorEnPesos)
         dest.writeString(numeroDeSerie)
         dest.writeString(fechaDeCreacion)
+        dest.writeString(idCosa)
     }
 
     // Companion object para crear el Parcelable de los datos que se quieren comunicar

@@ -1,8 +1,12 @@
 package com.example.posesionista
 
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,8 +14,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import java.io.File
 import java.util.*
 
 
@@ -23,6 +30,15 @@ class CosaFragment: Fragment() {
     private lateinit var campoFecha: TextView
     private lateinit var vistaParaFoto: ImageView
     private lateinit var botonDeCamara: ImageButton
+    private lateinit var archivoDeFoto: File
+    private var respuestaCamara = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        resultado ->
+        if (resultado.resultCode == Activity.RESULT_OK) {
+            //val datos = resultado.data
+            //vistaParaFoto.setImageBitmap(datos?.extras?.get("data") as Bitmap)
+            vistaParaFoto.setImageBitmap(BitmapFactory.decodeFile(archivoDeFoto.absolutePath))
+        }
+    }
 
     // Funcion del ciclo de vida que usamos para obtener los datos de la cosa que estamos recibiendo
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,11 +94,24 @@ class CosaFragment: Fragment() {
         botonDeCamara.apply {
             setOnClickListener{
                 val intentTomarFoto = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                archivoDeFoto = obtenerArchivoDeFoto("${cosa.idCosa}.jpg")
+                val fileProvider = FileProvider.getUriForFile(context, "com.example.posesionista.fileprovider", archivoDeFoto)
+                intentTomarFoto.putExtra(
+                    MediaStore.EXTRA_OUTPUT, fileProvider
+                )
                 try {
-                    startActivity(intentTomarFoto)
+                    respuestaCamara.launch(intentTomarFoto)
+
+                }catch (e: ActivityNotFoundException) {
+
                 }
             }
         }
+    }
+
+    private fun obtenerArchivoDeFoto(nombreDeArchivo: String): File {
+        val pathParaFotos = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File(pathParaFotos, nombreDeArchivo)
     }
 
     override fun onCreateView(
@@ -103,6 +132,9 @@ class CosaFragment: Fragment() {
         campoFecha.text = cosa.fechaDeCreacion
         vistaParaFoto = vista.findViewById(R.id.fotoDeCosa)
         botonDeCamara = vista.findViewById(R.id.botonDeCamara)
+        archivoDeFoto = File(context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${cosa.idCosa}.jpg")
+        vistaParaFoto.setImageBitmap(BitmapFactory.decodeFile(archivoDeFoto.absolutePath))
+
 
         // Seteo un listener para cuando se ocupe abrir el date picker
         button.setOnClickListener {
