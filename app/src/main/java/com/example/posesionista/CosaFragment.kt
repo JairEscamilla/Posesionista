@@ -1,13 +1,16 @@
 package com.example.posesionista
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import java.util.*
 
@@ -18,6 +21,8 @@ class CosaFragment: Fragment() {
     private lateinit var campoPrecio: EditText
     private lateinit var campoSerie: EditText
     private lateinit var campoFecha: TextView
+    private lateinit var vistaParaFoto: ImageView
+    private lateinit var botonDeCamara: ImageButton
 
     // Funcion del ciclo de vida que usamos para obtener los datos de la cosa que estamos recibiendo
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +73,16 @@ class CosaFragment: Fragment() {
         campoNombre.addTextChangedListener(observador)
         campoPrecio.addTextChangedListener(observador)
         campoSerie.addTextChangedListener(observador)
+        val barraDeActividad = activity as AppCompatActivity
+        barraDeActividad.supportActionBar?.setTitle(R.string.detalle_cosa)
+        botonDeCamara.apply {
+            setOnClickListener{
+                val intentTomarFoto = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                try {
+                    startActivity(intentTomarFoto)
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -86,6 +101,8 @@ class CosaFragment: Fragment() {
         campoPrecio.setText(cosa.valorEnPesos.toString())
         campoSerie.setText(cosa.numeroDeSerie)
         campoFecha.text = cosa.fechaDeCreacion
+        vistaParaFoto = vista.findViewById(R.id.fotoDeCosa)
+        botonDeCamara = vista.findViewById(R.id.botonDeCamara)
 
         // Seteo un listener para cuando se ocupe abrir el date picker
         button.setOnClickListener {

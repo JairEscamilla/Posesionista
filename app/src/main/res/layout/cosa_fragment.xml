@@ -9,24 +9,23 @@
         android:id="@+id/nombre_cosa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:ems="10"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:text="@string/nombre"
-        app:layout_constraintBottom_toBottomOf="@+id/labelNombre"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/labelNombre"
-        app:layout_constraintTop_toTopOf="@+id/labelNombre"
-        app:layout_constraintVertical_bias="0.571"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="DuplicateSpeakableTextCheck" />
 
     <TextView
         android:id="@+id/labelNombre"
         android:layout_width="63dp"
         android:layout_height="24dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="48dp"
         android:labelFor="@id/nombre_cosa"
         android:text="@string/label_nombre"
         app:layout_constraintEnd_toStartOf="@+id/nombre_cosa"
@@ -38,12 +37,12 @@
         android:id="@+id/labelPrecio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:labelFor="@id/precio_cosa"
         android:text="@string/label_precio"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/precio_cosa"
-        app:layout_constraintHorizontal_bias="0.478"
+        app:layout_constraintHorizontal_bias="0.475"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelNombre" />
 
@@ -61,19 +60,19 @@
         app:layout_constraintHorizontal_bias="0.771"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/labelPrecio"
-        app:layout_constraintVertical_bias="0.384"
+        app:layout_constraintVertical_bias="0.655"
         tools:ignore="DuplicateSpeakableTextCheck" />
 
     <TextView
         android:id="@+id/labelSerie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="52dp"
         android:layout_marginEnd="52dp"
         android:labelFor="@id/serie_cosa"
         android:text="@string/label_serie"
         app:layout_constraintEnd_toStartOf="@+id/serie_cosa"
-        app:layout_constraintHorizontal_bias="0.875"
+        app:layout_constraintHorizontal_bias="0.763"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelPrecio" />
 
@@ -81,6 +80,7 @@
         android:id="@+id/serie_cosa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
@@ -90,7 +90,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.771"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/labelSerie"
+        app:layout_constraintTop_toBottomOf="@+id/labelPrecio"
+        app:layout_constraintVertical_bias="1.0"
         tools:ignore="DuplicateSpeakableTextCheck" />
 
     <TextView
@@ -109,12 +110,39 @@
         android:id="@+id/pickDateBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="160dp"
+        android:layout_marginBottom="292dp"
         android:text="@string/change_date"
         app:flow_verticalAlign="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/labelFecha" />
+
+    <ImageView
+        android:id="@+id/fotoDeCosa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="132dp"
+        android:contentDescription="@string/nombre"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ImageContrastCheck"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/botonDeCamara"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/detalle_cosa"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fotoDeCosa"
+        app:layout_constraintVertical_bias="0.38"
+        app:srcCompat="@android:drawable/ic_menu_camera"
+        tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

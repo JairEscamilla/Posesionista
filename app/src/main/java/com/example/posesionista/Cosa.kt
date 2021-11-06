@@ -10,7 +10,7 @@ class Cosa(): Parcelable{
     private val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()) // Formateador para la fecha
     var nombreDeCosa: String = ""
     var valorEnPesos: Int = 0
-    var numeroDeSerie: String = UUID.randomUUID().toString().substring(0, 6)
+    var numeroDeSerie = ""
     var fechaDeCreacion: String = simpleDateFormat.format(Date())
 
 

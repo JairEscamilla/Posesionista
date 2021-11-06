@@ -1,18 +1,14 @@
 package com.example.posesionista
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 import kotlin.collections.ArrayList
 
-private const val TAG = "TablaDeCosasFragment"
+
 class TablaDeCosasFragment: Fragment() {
     // Variables iniciales necesarias para manejar la tabla de cosas
     private lateinit var cosaRecyclerView: RecyclerView
@@ -34,6 +30,12 @@ class TablaDeCosasFragment: Fragment() {
     // Generamos una interface para manejar las cosas seleccionadas
     interface InterfazTablaDeCosas {
         fun onCosasSeleccionada(unaCosa: Cosa)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val bar = activity as AppCompatActivity
+        bar.supportActionBar?.setTitle(R.string.app_name)
     }
 
     override fun onAttach(context: Context) {
@@ -65,11 +67,11 @@ class TablaDeCosasFragment: Fragment() {
                 target: RecyclerView.ViewHolder
             ): Boolean {
                 // Al moverse verticalmente, se mueve la posicion del item seleccionado
-                val from_pos = viewHolder.absoluteAdapterPosition
-                val to_pos = target.absoluteAdapterPosition
+                val fromPos = viewHolder.absoluteAdapterPosition
+                val toPos = target.absoluteAdapterPosition
 
-                Collections.swap(inventario, from_pos, to_pos)
-                adaptador?.notifyItemMoved(from_pos, to_pos)
+                Collections.swap(inventario, fromPos, toPos)
+                adaptador?.notifyItemMoved(fromPos, toPos)
 
                 return false
             }
@@ -80,9 +82,9 @@ class TablaDeCosasFragment: Fragment() {
     }
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -94,22 +96,17 @@ class TablaDeCosasFragment: Fragment() {
         val vista = inflater.inflate(R.layout.lista_cosas_fragment, container, false)
         cosaRecyclerView = vista.findViewById(R.id.cosa_recycler_view) as RecyclerView
         cosaRecyclerView.layoutManager = LinearLayoutManager(context)
-        actualizaUi(context!!)
+        actualizaUi(context as Context)
         return vista
     }
 
-    companion object {
-        fun nuevaInstancia(): TablaDeCosasFragment {
-            return TablaDeCosasFragment()
-        }
-    }
-
-    private inner class cosaHolder(vista: View): RecyclerView.ViewHolder(vista), View.OnClickListener {
+    private inner class CosaHolder(vista: View): RecyclerView.ViewHolder(vista), View.OnClickListener {
         private val nombreTextView: TextView = itemView.findViewById(R.id.label_nombre)
         private val precioTextView: TextView = itemView.findViewById(R.id.label_precio)
         private val serieTextView: TextView = itemView.findViewById(R.id.label_serie)
         private lateinit var cosa: Cosa
 
+        @SuppressLint("SetTextI18n")
         fun binding(cosa: Cosa) {
             // Seteamos a la vista los valos de la cosa
             this.cosa = cosa
@@ -122,19 +119,19 @@ class TablaDeCosasFragment: Fragment() {
 
         // Funcion para obtener el color de fondo de los precios de acuerdo al rango en el cual se encuentran
         fun getPriceColor(price: Int): Int {
-            var priceColor: Int
-            when(price) {
-                in 0..100 -> priceColor = Color.BLACK
-                in 100..200 -> priceColor = Color.BLUE
-                in 200..300 -> priceColor = Color.CYAN
-                in 300..400 -> priceColor = Color.DKGRAY
-                in 400..500 -> priceColor = Color.GRAY
-                in 500..600 -> priceColor = Color.rgb(153, 206, 244)
-                in 600..700 -> priceColor = Color.MAGENTA
-                in 700..800 -> priceColor = Color.RED
-                in 800..900 -> priceColor = Color.rgb(152, 202, 63)
-                in 900..1000 -> priceColor = Color.rgb(32, 41, 66)
-                else -> priceColor = Color.rgb(54, 179, 126)
+
+            val priceColor = when(price) {
+                in 0..100 -> Color.BLACK
+                in 100..200 -> Color.BLUE
+                in 200..300 -> Color.CYAN
+                in 300..400 -> Color.DKGRAY
+                in 400..500 -> Color.GRAY
+                in 500..600 -> Color.rgb(153, 206, 244)
+                in 600..700 -> Color.MAGENTA
+                in 700..800 -> Color.RED
+                in 800..900 -> Color.rgb(152, 202, 63)
+                in 900..1000 -> Color.rgb(32, 41, 66)
+                else -> Color.rgb(54, 179, 126)
             }
 
             return  priceColor
@@ -150,40 +147,58 @@ class TablaDeCosasFragment: Fragment() {
     }
 
     // Creamos el adapter
-    private inner class CosaAdapter(var inventario: ArrayList<Cosa>): RecyclerView.Adapter<cosaHolder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): cosaHolder {
+    private inner class CosaAdapter(var inventario: ArrayList<Cosa>): RecyclerView.Adapter<CosaHolder>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CosaHolder {
             val holder = layoutInflater.inflate(R.layout.cosa_layout, parent, false) // Inflamos el layout
-            return cosaHolder(holder) // Regresamos el holder
+            return CosaHolder(holder) // Regresamos el holder
         }
 
         override fun getItemCount(): Int {  // Regresamos el Item count como el tamaño del inventario
             return inventario.size
         }
 
-        override fun onBindViewHolder(holder: cosaHolder, position: Int) { // Obtenemos la la cosa actual y se la bindeamos al holder
+        override fun onBindViewHolder(holder: CosaHolder, position: Int) { // Obtenemos la la cosa actual y se la bindeamos al holder
             val cosa = inventario[position]
             holder.binding(cosa)
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         fun deleteItem(position: Int) { // Funcion para eliminar un item
-            var builder = AlertDialog.Builder(activity) // Genero al alert para confirmar que se quiere eliminar el item
+            val builder = AlertDialog.Builder(activity) // Genero al alert para confirmar que se quiere eliminar el item
             builder.setTitle(R.string.dialog_title)
             builder.setMessage(R.string.dialog_delete_item)
-            builder.setPositiveButton(R.string.si, {dialog, _ -> // En caso de que la respuesta sea positiva, eliminamos el item
+            builder.setPositiveButton(R.string.si) { dialog, _ -> // En caso de que la respuesta sea positiva, eliminamos el item
                 inventario.removeAt(position)
                 notifyDataSetChanged()
                 dialog.cancel()
-            })
+            }
 
-            builder.setNegativeButton(R.string.cancel, {dialog, _ -> // En caso negativo, se cierra el dialogo
+            builder.setNegativeButton(R.string.cancel) { dialog, _ -> // En caso negativo, se cierra el dialogo
                 notifyDataSetChanged()
                 dialog.cancel()
-            })
+            }
             builder.setOnDismissListener {
                 notifyDataSetChanged()
             }
-            var alert: AlertDialog = builder.create()
+            val alert: AlertDialog = builder.create()
             alert.show() // Muestro el alert
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_tabla_de_cosas, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.nueva_cosa -> {
+                val nuevaCosa = Cosa()
+                tablaDeCosasViewModel.agregaCosa(nuevaCosa)
+                callbackInterfaz?.onCosasSeleccionada(nuevaCosa)
+                true
+            } else -> return super.onOptionsItemSelected(item)
+        }
+
     }
 }
