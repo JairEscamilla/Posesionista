@@ -110,32 +110,12 @@ class TablaDeCosasFragment: Fragment() {
         fun binding(cosa: Cosa) {
             // Seteamos a la vista los valos de la cosa
             this.cosa = cosa
-            val priceColor = getPriceColor(cosa.valorEnPesos)
             nombreTextView.text = cosa.nombreDeCosa
             precioTextView.text = "$" + cosa.valorEnPesos.toString()
             serieTextView.text = cosa.numeroDeSerie
-            precioTextView.setTextColor(priceColor)
         }
 
-        // Funcion para obtener el color de fondo de los precios de acuerdo al rango en el cual se encuentran
-        fun getPriceColor(price: Int): Int {
 
-            val priceColor = when(price) {
-                in 0..100 -> Color.BLACK
-                in 100..200 -> Color.BLUE
-                in 200..300 -> Color.CYAN
-                in 300..400 -> Color.DKGRAY
-                in 400..500 -> Color.GRAY
-                in 500..600 -> Color.rgb(153, 206, 244)
-                in 600..700 -> Color.MAGENTA
-                in 700..800 -> Color.RED
-                in 800..900 -> Color.rgb(152, 202, 63)
-                in 900..1000 -> Color.rgb(32, 41, 66)
-                else -> Color.rgb(54, 179, 126)
-            }
-
-            return  priceColor
-        }
 
         init {
             itemView.setOnClickListener(this) // Seteamos el clicklistener al item
@@ -160,6 +140,26 @@ class TablaDeCosasFragment: Fragment() {
         override fun onBindViewHolder(holder: CosaHolder, position: Int) { // Obtenemos la la cosa actual y se la bindeamos al holder
             val cosa = inventario[position]
             holder.binding(cosa)
+            holder.itemView.setBackgroundColor(getFragmentColor(cosa.valorEnPesos))
+        }
+        // Funcion para obtener el color de fondo de los precios de acuerdo al rango en el cual se encuentran
+        fun getFragmentColor(price: Int): Int {
+
+            val priceColor = when(price) {
+                in 0..100 -> Color.BLACK
+                in 100..200 -> Color.BLUE
+                in 200..300 -> Color.CYAN
+                in 300..400 -> Color.DKGRAY
+                in 400..500 -> Color.GRAY
+                in 500..600 -> Color.rgb(153, 206, 244)
+                in 600..700 -> Color.MAGENTA
+                in 700..800 -> Color.RED
+                in 800..900 -> Color.rgb(152, 202, 63)
+                in 900..1000 -> Color.rgb(32, 41, 66)
+                else -> Color.rgb(54, 179, 126)
+            }
+
+            return  priceColor
         }
 
         @SuppressLint("NotifyDataSetChanged")

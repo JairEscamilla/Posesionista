@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:backgroundTint="@color/deletecolor"
+    android:orientation="vertical"
     android:paddingHorizontal="15dp"
-    android:paddingVertical="10dp"
-    >
+    android:paddingVertical="10dp">
 
     <TextView
         android:id="@+id/label_nombre"
@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:text="@string/label_nombre"
+        android:textColor="@color/white"
         android:textSize="25sp" />
 
     <TextView
@@ -22,6 +23,7 @@
         android:layout_toEndOf="@id/label_nombre"
         android:text="@string/label_precio"
         android:textAlignment="textEnd"
+        android:textColor="@color/white"
         android:textSize="25sp" />
 
     <TextView
@@ -30,5 +32,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/label_nombre"
         android:text="@string/label_serie"
+        android:textColor="@color/white"
         android:textSize="20sp" />
 </RelativeLayout>
