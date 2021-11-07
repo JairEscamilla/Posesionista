@@ -143,7 +143,7 @@ class CosaFragment: Fragment() {
                 val dpd =
                     activity?.let { it1 ->
                         DatePickerDialog(it1, { _, yearN, monthOfYear, dayOfMonth ->
-                            val newDate = "${dayOfMonth}-${monthOfYear}-${yearN}"
+                            val newDate = "${dayOfMonth}-${monthOfYear + 1}-${yearN}"
                             campoFecha.text = newDate
                             cosa.fechaDeCreacion = newDate
 
