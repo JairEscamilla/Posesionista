@@ -31,7 +31,7 @@ class TablaDeCosasFragment: Fragment() {
 
     // Generamos una interface para manejar las cosas seleccionadas
     interface InterfazTablaDeCosas {
-        fun onCosasSeleccionada(unaCosa: Cosa)
+        fun onCosasSeleccionada(unaCosa: Cosa, tablaCosas: TablaDeCosasViewModel)
     }
 
     override fun onStart() {
@@ -127,7 +127,7 @@ class TablaDeCosasFragment: Fragment() {
         }
 
         override fun onClick(v: View?) {
-            callbackInterfaz?.onCosasSeleccionada(cosa) // Ejecutamos la funcion de oncosa seleccionada que viene de la interfaz
+            callbackInterfaz?.onCosasSeleccionada(cosa, tablaDeCosasViewModel) // Ejecutamos la funcion de oncosa seleccionada que viene de la interfaz
         }
     }
 
@@ -228,8 +228,7 @@ class TablaDeCosasFragment: Fragment() {
         return when (item.itemId) {
             R.id.nueva_cosa -> {
                 val nuevaCosa = Cosa()
-                tablaDeCosasViewModel.agregaCosa(nuevaCosa)
-                callbackInterfaz?.onCosasSeleccionada(nuevaCosa)
+                callbackInterfaz?.onCosasSeleccionada(nuevaCosa, tablaDeCosasViewModel)
                 true
             } else -> return super.onOptionsItemSelected(item)
         }
