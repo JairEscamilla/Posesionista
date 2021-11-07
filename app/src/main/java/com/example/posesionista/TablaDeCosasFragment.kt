@@ -13,12 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.util.*
 import kotlin.collections.ArrayList
 
 
 class TablaDeCosasFragment: Fragment() {
     // Variables iniciales necesarias para manejar la tabla de cosas
-    private lateinit var cosaRecyclerView: RecyclerView
+    //private lateinit var cosaRecyclerView: RecyclerView
     private lateinit var sectionRecyclerView: RecyclerView
     private var adaptador: CosaAdapter? = null
     private var adaptadorSections: SectionsAdapter ? = null
@@ -142,6 +143,30 @@ class TablaDeCosasFragment: Fragment() {
                 cosasRV.layoutManager = LinearLayoutManager(context)
                 cosasRV.adapter = cosaAdapter
                 cosasRV.setBackgroundColor(backgroundColor)
+                val swipegestures = object : SwipeGestures(context!!) { //  Genero los listeners para cuando se detecte el swipe del usuario
+                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                        if(direction == ItemTouchHelper.LEFT) {
+                            cosaAdapter?.deleteItem(viewHolder.absoluteAdapterPosition) // Si se hace swipe hacia la izquierda, entonces elimino el item
+                        }
+                    }
+
+                    override fun onMove(
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder,
+                        target: RecyclerView.ViewHolder
+                    ): Boolean {
+                        // Al moverse verticalmente, se mueve la posicion del item seleccionado
+                        val fromPos = viewHolder.absoluteAdapterPosition
+                        val toPos = target.absoluteAdapterPosition
+
+                        Collections.swap(section.list, fromPos, toPos)
+                        cosaAdapter?.notifyItemMoved(fromPos, toPos)
+
+                        return false
+                    }
+                }
+                val touchHelper = ItemTouchHelper(swipegestures)
+                touchHelper.attachToRecyclerView(cosasRV)
             }
         }
 
