@@ -29,11 +29,18 @@ class TablaDeCosasViewModel: ViewModel() {
     }
 
     fun agregaCosa(unaCosa: Cosa) {
-        if(unaCosa.valorEnPesos >= 100) {
-            listOfSections[1].list.add(unaCosa)
-        }else {
-            listOfSections[0].list.add(unaCosa)
+        when(unaCosa.valorEnPesos){
+            in 0..100 -> listOfSections[0].list.add(unaCosa)
+            in 100..200 -> listOfSections[1].list.add(unaCosa)
+            in 200..300 -> listOfSections[2].list.add(unaCosa)
+            in 300..400 -> listOfSections[3].list.add(unaCosa)
+            in 400..500 -> listOfSections[4].list.add(unaCosa)
+            in 500..600 -> listOfSections[5].list.add(unaCosa)
+            in 600..700 -> listOfSections[6].list.add(unaCosa)
+            in 700..800 -> listOfSections[7].list.add(unaCosa)
+            in 800..900 -> listOfSections[8].list.add(unaCosa)
+            in 900..1000 -> listOfSections[9].list.add(unaCosa)
+            else -> listOfSections[10].list.add(unaCosa)
         }
-
     }
 }
