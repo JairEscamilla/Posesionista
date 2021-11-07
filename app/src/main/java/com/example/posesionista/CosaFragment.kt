@@ -59,12 +59,7 @@ class CosaFragment: Fragment() {
             // Funcion que se ejecuta al cambiar el texto del input
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if(s.hashCode() == campoNombre.text.hashCode()){
-                    if (s.toString().isEmpty()){ // Valido que el campo no pueda estar vacio
-                        Toast.makeText(activity, "El campo nombre no puede estar vacio", Toast.LENGTH_SHORT).show()
-                    }else{
-                        cosa.nombreDeCosa = s.toString()
-                    }
-
+                    cosa.nombreDeCosa = s.toString()
                 }
                 if(s.hashCode() == campoPrecio.text.hashCode()){
                     if(s!= null){

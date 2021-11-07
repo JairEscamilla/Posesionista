@@ -2,8 +2,10 @@ package com.example.posesionista
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity(), TablaDeCosasFragment.InterfazTablaDeCosas {
+    private var cosaActual: Cosa = Cosa()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -18,8 +20,17 @@ class MainActivity : AppCompatActivity(), TablaDeCosasFragment.InterfazTablaDeCo
 
     override fun onCosasSeleccionada(unaCosa: Cosa) {
         // Obtenemos y seteamos una nueva instancia del fragment
+        cosaActual = unaCosa
         val fragmento = CosaFragment.nuevaInstancia(unaCosa)
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragmento).addToBackStack(null).commit()
+    }
+
+    override fun onBackPressed() {
+        if(cosaActual.nombreDeCosa.isEmpty()) {
+            Toast.makeText(this, "El campo nombre no puede estar vacio", Toast.LENGTH_SHORT).show()
+        }else {
+            super.onBackPressed()
+        }
     }
 
 }
