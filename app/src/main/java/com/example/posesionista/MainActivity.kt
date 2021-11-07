@@ -8,6 +8,7 @@ class MainActivity : AppCompatActivity(), TablaDeCosasFragment.InterfazTablaDeCo
     private var cosaActual: Cosa = Cosa()
     private var tablaDeCosasViewModel: TablaDeCosasViewModel? = null
     private var isEditing: Boolean = false
+    private var currentCosaPosition: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity(), TablaDeCosasFragment.InterfazTablaDeCo
         cosaActual = unaCosa
         tablaDeCosasViewModel = tablaCosas
         isEditing = editing
+        currentCosaPosition = tablaCosas.getIndexOfSection(unaCosa.valorEnPesos)
         val fragmento = CosaFragment.nuevaInstancia(unaCosa)
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragmento).addToBackStack(null).commit()
     }
@@ -35,6 +37,8 @@ class MainActivity : AppCompatActivity(), TablaDeCosasFragment.InterfazTablaDeCo
         }else {
             if(!isEditing) {
                 tablaDeCosasViewModel?.agregaCosa(cosaActual)
+            }else{
+                tablaDeCosasViewModel?.reorderArrays(cosaActual, currentCosaPosition)
             }
 
             super.onBackPressed()

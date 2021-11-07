@@ -20,6 +20,7 @@ class TablaDeCosasViewModel: ViewModel() {
         "$900-$1000",
         "+$1000"
     )
+    private val ranges = arrayListOf(0..100, 100..200, 200..300, 300..400, 400..500, 500..600, 600..700, 700..800, 800..900, 900..1000, 1000..10000000)
     val listOfSections = ArrayList<Sections>()
 
     init {
@@ -29,18 +30,35 @@ class TablaDeCosasViewModel: ViewModel() {
     }
 
     fun agregaCosa(unaCosa: Cosa) {
-        when(unaCosa.valorEnPesos){
-            in 0..100 -> listOfSections[0].list.add(unaCosa)
-            in 100..200 -> listOfSections[1].list.add(unaCosa)
-            in 200..300 -> listOfSections[2].list.add(unaCosa)
-            in 300..400 -> listOfSections[3].list.add(unaCosa)
-            in 400..500 -> listOfSections[4].list.add(unaCosa)
-            in 500..600 -> listOfSections[5].list.add(unaCosa)
-            in 600..700 -> listOfSections[6].list.add(unaCosa)
-            in 700..800 -> listOfSections[7].list.add(unaCosa)
-            in 800..900 -> listOfSections[8].list.add(unaCosa)
-            in 900..1000 -> listOfSections[9].list.add(unaCosa)
-            else -> listOfSections[10].list.add(unaCosa)
+        val index = getIndexOfSection(unaCosa.valorEnPesos)
+        listOfSections[index].list.add(unaCosa)
+    }
+
+    fun reorderArrays(cosa: Cosa, prevSectionIndex: Int) {
+        val newIndex = getIndexOfSection(cosa.valorEnPesos)
+        if(newIndex != prevSectionIndex) {
+            val filteredValues = listOfSections[prevSectionIndex].list.filter { it.valorEnPesos in ranges[prevSectionIndex] }
+            listOfSections[prevSectionIndex].list.clear()
+            listOfSections[prevSectionIndex].list.addAll(filteredValues)
+            listOfSections[newIndex].list.add(cosa)
         }
+    }
+
+    fun getIndexOfSection(price: Int): Int {
+        val position = when(price){
+            in 0..100 -> 0
+            in 100..200 -> 1
+            in 200..300 -> 2
+            in 300..400 -> 3
+            in 400..500 -> 4
+            in 500..600 -> 5
+            in 600..700 -> 6
+            in 700..800 -> 7
+            in 800..900 -> 8
+            in 900..1000 -> 9
+            else -> 10
+        }
+
+        return position
     }
 }
