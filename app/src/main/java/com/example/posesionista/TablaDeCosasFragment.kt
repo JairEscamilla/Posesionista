@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -137,11 +136,12 @@ class TablaDeCosasFragment: Fragment() {
         inner class DataViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
             private val sectionNameTV: TextView = itemView.findViewById(R.id.section_title)
             private val cosasRV: RecyclerView = itemView.findViewById(R.id.child_recycler_view)
-            fun bind(section: Sections) {
+            fun bind(section: Sections, backgroundColor: Int) {
                 sectionNameTV.text = section.section
                 val cosaAdapter = CosaAdapter(section.list)
                 cosasRV.layoutManager = LinearLayoutManager(context)
                 cosasRV.adapter = cosaAdapter
+                cosasRV.setBackgroundColor(backgroundColor)
             }
         }
 
@@ -152,11 +152,31 @@ class TablaDeCosasFragment: Fragment() {
         }
 
         override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
-            holder.bind(listOfSections[position])
+            val backgroundColor = getFragmentColor(position)
+            holder.bind(listOfSections[position], backgroundColor)
+            holder.itemView.setBackgroundColor(backgroundColor)
         }
 
         override fun getItemCount(): Int {
             return listOfSections.size
+        }
+        fun getFragmentColor(position: Int): Int {
+
+            val priceColor = when(position) {
+                in -1..0 -> Color.BLACK
+                in 0..1 -> Color.BLUE
+                in 1..2 -> Color.CYAN
+                in 2..3 -> Color.DKGRAY
+                in 3..4 -> Color.GRAY
+                in 4..5 -> Color.rgb(153, 206, 244)
+                in 5..6 -> Color.MAGENTA
+                in 6..7 -> Color.RED
+                in 7..8 -> Color.rgb(152, 202, 63)
+                in 8..9 -> Color.rgb(32, 41, 66)
+                else -> Color.rgb(54, 179, 126)
+            }
+
+            return  priceColor
         }
     }
 
@@ -174,26 +194,6 @@ class TablaDeCosasFragment: Fragment() {
         override fun onBindViewHolder(holder: CosaHolder, position: Int) { // Obtenemos la la cosa actual y se la bindeamos al holder
             val cosa = inventario[position]
             holder.binding(cosa)
-            holder.itemView.setBackgroundColor(getFragmentColor(cosa.valorEnPesos))
-        }
-        // Funcion para obtener el color de fondo de los precios de acuerdo al rango en el cual se encuentran
-        fun getFragmentColor(price: Int): Int {
-
-            val priceColor = when(price) {
-                in 0..100 -> Color.BLACK
-                in 100..200 -> Color.BLUE
-                in 200..300 -> Color.CYAN
-                in 300..400 -> Color.DKGRAY
-                in 400..500 -> Color.GRAY
-                in 500..600 -> Color.rgb(153, 206, 244)
-                in 600..700 -> Color.MAGENTA
-                in 700..800 -> Color.RED
-                in 800..900 -> Color.rgb(152, 202, 63)
-                in 900..1000 -> Color.rgb(32, 41, 66)
-                else -> Color.rgb(54, 179, 126)
-            }
-
-            return  priceColor
         }
 
         @SuppressLint("NotifyDataSetChanged")
