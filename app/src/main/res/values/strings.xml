@@ -15,4 +15,5 @@
     <string name="change_date">Cambiar fecha</string>
     <string name="nueva_cosa">Añade cosa</string>
     <string name="detalle_cosa">Detalle de cosa</string>
+    <string name="section">Nombre de seccion</string>
 </resources>

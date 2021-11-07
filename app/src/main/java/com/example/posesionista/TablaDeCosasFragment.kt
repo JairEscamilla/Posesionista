@@ -20,7 +20,9 @@ import kotlin.collections.ArrayList
 class TablaDeCosasFragment: Fragment() {
     // Variables iniciales necesarias para manejar la tabla de cosas
     private lateinit var cosaRecyclerView: RecyclerView
+    private lateinit var sectionRecyclerView: RecyclerView
     private var adaptador: CosaAdapter? = null
+    private var adaptadorSections: SectionsAdapter ? = null
     private var callbackInterfaz: InterfazTablaDeCosas? = null
     // Cargamos el view model
     private val tablaDeCosasViewModel: TablaDeCosasViewModel by lazy {
@@ -52,7 +54,10 @@ class TablaDeCosasFragment: Fragment() {
 
     // Funcion que actualiza la UI y recibe el contexto de la aplicacion
     private fun actualizaUi(context: Context) {
-        val inventario = tablaDeCosasViewModel.inventario // Obtengo el inventario
+        adaptadorSections = SectionsAdapter(tablaDeCosasViewModel.listOfSections)
+        sectionRecyclerView.adapter = adaptadorSections
+
+        /*val inventario = tablaDeCosasViewModel.inventario // Obtengo el inventario
         adaptador = CosaAdapter(inventario) // Obtengo el adaptador del recycler view
         val swipegestures = object : SwipeGestures(context) { //  Genero los listeners para cuando se detecte el swipe del usuario
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -78,7 +83,7 @@ class TablaDeCosasFragment: Fragment() {
         }
         val touchHelper = ItemTouchHelper(swipegestures)
         touchHelper.attachToRecyclerView(cosaRecyclerView)
-        cosaRecyclerView.adapter = adaptador
+        cosaRecyclerView.adapter = adaptador*/
     }
 
 
@@ -94,8 +99,8 @@ class TablaDeCosasFragment: Fragment() {
     ): View? {
         // Generamos el Recycler view y después actualizamos el UI
         val vista = inflater.inflate(R.layout.lista_cosas_fragment, container, false)
-        cosaRecyclerView = vista.findViewById(R.id.cosa_recycler_view) as RecyclerView
-        cosaRecyclerView.layoutManager = LinearLayoutManager(context)
+        sectionRecyclerView = vista.findViewById(R.id.cosa_recycler_view) as RecyclerView
+        sectionRecyclerView.layoutManager = LinearLayoutManager(context)
         actualizaUi(context as Context)
         return vista
     }
@@ -123,6 +128,35 @@ class TablaDeCosasFragment: Fragment() {
 
         override fun onClick(v: View?) {
             callbackInterfaz?.onCosasSeleccionada(cosa) // Ejecutamos la funcion de oncosa seleccionada que viene de la interfaz
+        }
+    }
+
+
+    private inner class SectionsAdapter(var listOfSections: ArrayList<Sections>): RecyclerView.Adapter<SectionsAdapter.DataViewHolder>() {
+
+        inner class DataViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+            private val sectionNameTV: TextView = itemView.findViewById(R.id.section_title)
+            private val cosasRV: RecyclerView = itemView.findViewById(R.id.child_recycler_view)
+            fun bind(section: Sections) {
+                sectionNameTV.text = section.section
+                val cosaAdapter = CosaAdapter(section.list)
+                cosasRV.layoutManager = LinearLayoutManager(context)
+                cosasRV.adapter = cosaAdapter
+            }
+        }
+
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataViewHolder {
+            val holder = LayoutInflater.from(parent.context).inflate(R.layout.sections_layout, parent, false)
+            return DataViewHolder(holder)
+        }
+
+        override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
+            holder.bind(listOfSections[position])
+        }
+
+        override fun getItemCount(): Int {
+            return listOfSections.size
         }
     }
 
