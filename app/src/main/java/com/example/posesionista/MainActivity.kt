@@ -7,6 +7,7 @@ import android.widget.Toast
 class MainActivity : AppCompatActivity(), TablaDeCosasFragment.InterfazTablaDeCosas {
     private var cosaActual: Cosa = Cosa()
     private var tablaDeCosasViewModel: TablaDeCosasViewModel? = null
+    private var isEditing: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,10 +20,11 @@ class MainActivity : AppCompatActivity(), TablaDeCosasFragment.InterfazTablaDeCo
         }
     }
 
-    override fun onCosasSeleccionada(unaCosa: Cosa, tablaCosas: TablaDeCosasViewModel) {
+    override fun onCosasSeleccionada(unaCosa: Cosa, tablaCosas: TablaDeCosasViewModel, editing: Boolean) {
         // Obtenemos y seteamos una nueva instancia del fragment
         cosaActual = unaCosa
         tablaDeCosasViewModel = tablaCosas
+        isEditing = editing
         val fragmento = CosaFragment.nuevaInstancia(unaCosa)
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragmento).addToBackStack(null).commit()
     }
@@ -31,7 +33,10 @@ class MainActivity : AppCompatActivity(), TablaDeCosasFragment.InterfazTablaDeCo
         if(cosaActual.nombreDeCosa.isEmpty()) {
             Toast.makeText(this, "El campo nombre no puede estar vacio", Toast.LENGTH_SHORT).show()
         }else {
-            tablaDeCosasViewModel?.agregaCosa(cosaActual)
+            if(!isEditing) {
+                tablaDeCosasViewModel?.agregaCosa(cosaActual)
+            }
+
             super.onBackPressed()
         }
     }
