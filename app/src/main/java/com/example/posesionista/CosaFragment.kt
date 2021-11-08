@@ -134,7 +134,6 @@ class CosaFragment: Fragment() {
         }
 
         archivoDeFoto = File(context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${cosa.idCosa}.jpg")
-        Log.d("FOTO", "${archivoDeFoto.totalSpace}")
         if(archivoDeFoto.totalSpace == 0L) {
             deleteButton.isEnabled = false
             vistaParaFoto.setImageResource(R.drawable.placeholder)

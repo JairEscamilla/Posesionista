@@ -3,10 +3,12 @@ package com.example.posesionista
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Environment
 import android.view.*
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -86,6 +88,7 @@ class TablaDeCosasFragment: Fragment() {
         private val nombreTextView: TextView = itemView.findViewById(R.id.label_nombre)
         private val precioTextView: TextView = itemView.findViewById(R.id.label_precio)
         private val serieTextView: TextView = itemView.findViewById(R.id.label_serie)
+        private val imageContainer: ImageView = itemView.findViewById(R.id.cosa_image)
         private lateinit var cosa: Cosa
 
         @SuppressLint("SetTextI18n")
@@ -95,6 +98,13 @@ class TablaDeCosasFragment: Fragment() {
             nombreTextView.text = cosa.nombreDeCosa
             precioTextView.text = "$" + cosa.valorEnPesos.toString()
             serieTextView.text = cosa.numeroDeSerie
+            imageContainer.setImageResource(R.drawable.placeholder)
+            val archivoDeFoto = File(context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${cosa.idCosa}.jpg")
+            if(archivoDeFoto.totalSpace == 0L) {
+                imageContainer.setImageResource(R.drawable.placeholder)
+            }else {
+                imageContainer.setImageBitmap(BitmapFactory.decodeFile(archivoDeFoto.absolutePath))
+            }
         }
 
 
