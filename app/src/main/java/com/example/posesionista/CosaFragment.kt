@@ -10,6 +10,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -127,8 +128,15 @@ class CosaFragment: Fragment() {
         campoFecha.text = cosa.fechaDeCreacion
         vistaParaFoto = vista.findViewById(R.id.fotoDeCosa)
         botonDeCamara = vista.findViewById(R.id.botonDeCamara)
+
         archivoDeFoto = File(context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${cosa.idCosa}.jpg")
-        vistaParaFoto.setImageBitmap(BitmapFactory.decodeFile(archivoDeFoto.absolutePath))
+        Log.d("FOTO", "${archivoDeFoto.totalSpace}")
+        if(archivoDeFoto.totalSpace == 0L) {
+            vistaParaFoto.setImageResource(R.drawable.placeholder)
+        }else {
+            vistaParaFoto.setImageBitmap(BitmapFactory.decodeFile(archivoDeFoto.absolutePath))
+        }
+
 
 
         // Seteo un listener para cuando se ocupe abrir el date picker
