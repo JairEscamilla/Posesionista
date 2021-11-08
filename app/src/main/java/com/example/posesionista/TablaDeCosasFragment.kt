@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Environment
 import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -202,6 +204,9 @@ class TablaDeCosasFragment: Fragment() {
             builder.setTitle(R.string.dialog_title)
             builder.setMessage(R.string.dialog_delete_item)
             builder.setPositiveButton(R.string.si) { dialog, _ -> // En caso de que la respuesta sea positiva, eliminamos el item
+                val currentCosa = inventario[position]
+                val archivoDeFoto = obtenerArchivoDeFoto("${currentCosa.idCosa}.jpg")
+                archivoDeFoto.delete()
                 inventario.removeAt(position)
                 updateTotals()
                 notifyDataSetChanged()
@@ -217,6 +222,10 @@ class TablaDeCosasFragment: Fragment() {
             }
             val alert: AlertDialog = builder.create()
             alert.show() // Muestro el alert
+        }
+        private fun obtenerArchivoDeFoto(nombreDeArchivo: String): File {
+            val pathParaFotos = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            return File(pathParaFotos, nombreDeArchivo)
         }
     }
 
@@ -243,9 +252,9 @@ class TablaDeCosasFragment: Fragment() {
 
     fun updateTotals() {
         val totalThings = tablaDeCosasViewModel.getTotalThings()
-        val totalPrices = tablaDeCosasViewModel.getTotalPrices()
-        totalThingsTV.text = "$totalThings cosa(s)"
-        totalPricesTV.text = "$$totalPrices"
+        val totalPrices: Int = tablaDeCosasViewModel.getTotalPrices()
+        "$totalThings cosa(s)".also { totalThingsTV.text = it }
+        "$$totalPrices".also { totalPricesTV.text = it }
     }
 
 }
