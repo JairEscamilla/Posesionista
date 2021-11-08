@@ -133,16 +133,30 @@
 
     <ImageButton
         android:id="@+id/botonDeCamara"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="108dp"
+        android:backgroundTint="@color/design_default_color_primary"
         android:contentDescription="@string/detalle_cosa"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.464"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fotoDeCosa"
-        app:layout_constraintVertical_bias="0.578"
+        app:layout_constraintVertical_bias="0.394"
         app:srcCompat="@android:drawable/ic_menu_camera"
         tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+
+    <ImageButton
+        android:id="@+id/deleteButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:backgroundTint="@color/deletecolor"
+        android:contentDescription="@string/cancel"
+        app:layout_constraintBottom_toBottomOf="@+id/botonDeCamara"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.354"
+        app:layout_constraintStart_toEndOf="@+id/botonDeCamara"
+        app:layout_constraintTop_toTopOf="@+id/botonDeCamara"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_menu_delete" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

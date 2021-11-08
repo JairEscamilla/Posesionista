@@ -32,6 +32,7 @@ class CosaFragment: Fragment() {
     private lateinit var vistaParaFoto: ImageView
     private lateinit var botonDeCamara: ImageButton
     private lateinit var archivoDeFoto: File
+    private lateinit var deleteButton: ImageButton
     private var respuestaCamara = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         resultado ->
         if (resultado.resultCode == Activity.RESULT_OK) {
@@ -97,7 +98,7 @@ class CosaFragment: Fragment() {
                 )
                 try {
                     respuestaCamara.launch(intentTomarFoto)
-
+                    deleteButton.isEnabled = true
                 }catch (e: ActivityNotFoundException) {
 
                 }
@@ -105,10 +106,7 @@ class CosaFragment: Fragment() {
         }
     }
 
-    private fun obtenerArchivoDeFoto(nombreDeArchivo: String): File {
-        val pathParaFotos = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File(pathParaFotos, nombreDeArchivo)
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -128,12 +126,20 @@ class CosaFragment: Fragment() {
         campoFecha.text = cosa.fechaDeCreacion
         vistaParaFoto = vista.findViewById(R.id.fotoDeCosa)
         botonDeCamara = vista.findViewById(R.id.botonDeCamara)
+        deleteButton = vista.findViewById(R.id.deleteButton)
+        deleteButton.setOnClickListener {
+            val archivoDeFoto = obtenerArchivoDeFoto("${cosa.idCosa}.jpg")
+            archivoDeFoto.delete()
+            vistaParaFoto.setImageResource(R.drawable.placeholder)
+        }
 
         archivoDeFoto = File(context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${cosa.idCosa}.jpg")
         Log.d("FOTO", "${archivoDeFoto.totalSpace}")
         if(archivoDeFoto.totalSpace == 0L) {
+            deleteButton.isEnabled = false
             vistaParaFoto.setImageResource(R.drawable.placeholder)
         }else {
+            deleteButton.isEnabled = true
             vistaParaFoto.setImageBitmap(BitmapFactory.decodeFile(archivoDeFoto.absolutePath))
         }
 
@@ -175,5 +181,11 @@ class CosaFragment: Fragment() {
                 arguments = argumentos
             }
         }
+    }
+
+
+    private fun obtenerArchivoDeFoto(nombreDeArchivo: String): File {
+        val pathParaFotos = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File(pathParaFotos, nombreDeArchivo)
     }
 }
