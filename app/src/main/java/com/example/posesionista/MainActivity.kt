@@ -40,9 +40,9 @@ class MainActivity : AppCompatActivity(), TablaDeCosasFragment.InterfazTablaDeCo
             }else{
                 tablaDeCosasViewModel?.reorderArrays(cosaActual, currentCosaPosition)
             }
-
             super.onBackPressed()
         }
     }
+
 
 }

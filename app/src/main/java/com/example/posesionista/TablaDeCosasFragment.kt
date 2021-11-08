@@ -22,6 +22,8 @@ class TablaDeCosasFragment: Fragment() {
     private lateinit var sectionRecyclerView: RecyclerView
     private var adaptadorSections: SectionsAdapter ? = null
     private var callbackInterfaz: InterfazTablaDeCosas? = null
+    private lateinit var totalThingsTV: TextView
+    private lateinit var totalPricesTV: TextView
     // Cargamos el view model
     private val tablaDeCosasViewModel: TablaDeCosasViewModel by lazy {
         ViewModelProvider(this).get(TablaDeCosasViewModel::class.java)
@@ -71,6 +73,9 @@ class TablaDeCosasFragment: Fragment() {
         val vista = inflater.inflate(R.layout.lista_cosas_fragment, container, false)
         sectionRecyclerView = vista.findViewById(R.id.cosa_recycler_view) as RecyclerView
         sectionRecyclerView.layoutManager = LinearLayoutManager(context)
+        totalThingsTV = vista.findViewById(R.id.total_cosas)
+        totalPricesTV = vista.findViewById(R.id.total_precios)
+
         actualizaUi()
         return vista
     }
@@ -198,6 +203,7 @@ class TablaDeCosasFragment: Fragment() {
             builder.setMessage(R.string.dialog_delete_item)
             builder.setPositiveButton(R.string.si) { dialog, _ -> // En caso de que la respuesta sea positiva, eliminamos el item
                 inventario.removeAt(position)
+                updateTotals()
                 notifyDataSetChanged()
                 dialog.cancel()
             }
@@ -227,6 +233,19 @@ class TablaDeCosasFragment: Fragment() {
                 true
             } else -> return super.onOptionsItemSelected(item)
         }
-
     }
+
+    @SuppressLint("SetTextI18n")
+    override fun onResume() {
+        super.onResume()
+        updateTotals()
+    }
+
+    fun updateTotals() {
+        val totalThings = tablaDeCosasViewModel.getTotalThings()
+        val totalPrices = tablaDeCosasViewModel.getTotalPrices()
+        totalThingsTV.text = "$totalThings cosa(s)"
+        totalPricesTV.text = "$$totalPrices"
+    }
+
 }

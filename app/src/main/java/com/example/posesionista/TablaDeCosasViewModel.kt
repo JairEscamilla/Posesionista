@@ -29,6 +29,25 @@ class TablaDeCosasViewModel: ViewModel() {
         }
     }
 
+    fun getTotalThings(): Int {
+        var totalThings = 0
+        for(sections in listOfSections){
+            totalThings += sections.list.size
+        }
+        return totalThings
+    }
+
+    fun getTotalPrices(): Int {
+        var totalPrices = 0
+        for(sections in listOfSections) {
+            for(cosa in sections.list) {
+                totalPrices+= cosa.valorEnPesos
+            }
+        }
+
+        return totalPrices
+    }
+
     fun agregaCosa(unaCosa: Cosa) {
         val index = getIndexOfSection(unaCosa.valorEnPesos)
         listOfSections[index].list.add(unaCosa)

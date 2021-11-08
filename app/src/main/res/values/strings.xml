@@ -16,4 +16,7 @@
     <string name="nueva_cosa">Añade cosa</string>
     <string name="detalle_cosa">Detalle de cosa</string>
     <string name="section">Nombre de seccion</string>
+    <string name="total_cosas">Número total de cosas:</string>
+    <string name="total_precios">Suma de precios:</string>
+    <string name="cero">0</string>
 </resources>
